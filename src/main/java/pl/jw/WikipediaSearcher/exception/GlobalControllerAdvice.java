@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestClientException;
 
+import java.net.URISyntaxException;
+
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
@@ -22,6 +24,11 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(value = NoMatchedArticleException.class)
     public ResponseEntity<String> handleException(NoMatchedArticleException exception) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = URISyntaxException.class)
+    public ResponseEntity<String> handleException(URISyntaxException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
