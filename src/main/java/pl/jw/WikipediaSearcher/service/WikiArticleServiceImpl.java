@@ -4,7 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import pl.jw.WikipediaSearcher.exception.EmptyResponseException;
+import pl.jw.WikipediaSearcher.exception.NoMatchedArticleException;
 import pl.jw.WikipediaSearcher.model.WikiArticle;
 
 import java.util.ArrayList;
@@ -19,12 +22,12 @@ public class WikiArticleServiceImpl implements WikiArticleService {
     private String snippetExpression;
 
     @Override
-    public String getUrlResultForSearchedPhrase(String phrase) {
+    public String getUrlResultForSearchedPhrase(String phrase) throws RestClientException, EmptyResponseException, NoMatchedArticleException {
         RestTemplate restTemplate = new RestTemplate();
         String wikiJsonResponse = restTemplate.getForObject(createSearchQueryForWiki(phrase), String.class);
 
-        if (wikiJsonResponse.isEmpty()) {
-            //TODO throw ...
+        if (wikiJsonResponse == null) {
+            throw new EmptyResponseException("Response from wikipedia API is empty");
         }
 
         List<WikiArticle> wikiArticleList = parseJsonResponseToWikiArticleList(wikiJsonResponse);
@@ -32,7 +35,7 @@ public class WikiArticleServiceImpl implements WikiArticleService {
                 .filter(wikiArticleListElemnt -> checkIfArticleSnippetContainsExpression(wikiArticleListElemnt))
                 .findFirst();
         if(!searchedArticleOpt.isPresent()){
-            //TODO throw
+            throw new NoMatchedArticleException("There is no matched articles to given phrase");
         }
 
         return  "https://en.wikipedia.org/wiki/" + searchedArticleOpt.get().getTitle().replace(" ","_");

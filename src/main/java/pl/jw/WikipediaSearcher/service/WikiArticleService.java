@@ -1,5 +1,7 @@
 package pl.jw.WikipediaSearcher.service;
 
+import pl.jw.WikipediaSearcher.exception.EmptyResponseException;
+import pl.jw.WikipediaSearcher.exception.NoMatchedArticleException;
 import pl.jw.WikipediaSearcher.model.WikiArticle;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface WikiArticleService {
      * @param phrase given as a parameter from controller endpoint
      * @return String with url to wikipedia article
      */
-    String getUrlResultForSearchedPhrase(String phrase);
+    String getUrlResultForSearchedPhrase(String phrase) throws EmptyResponseException, NoMatchedArticleException;
 
     /**
      * Create url with query for wikipedia api needed to search articles
@@ -24,7 +26,7 @@ public interface WikiArticleService {
     String createSearchQueryForWiki(String phrase);
 
     /**
-     * By given Json in String parse Json form response from wikipedia to list of WikiArticles objects
+     * By given Json as String parse Json form wikipedia response to list of WikiArticles objects
      * @param wikiJsonResponse - response from wikipedia
      * @return List of WikiArticles
      */
