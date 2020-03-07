@@ -1,5 +1,9 @@
 package pl.jw.WikipediaSearcher.service;
 
+import pl.jw.WikipediaSearcher.model.WikiArticle;
+
+import java.util.List;
+
 public interface WikiArticleService {
 
     /**
@@ -18,4 +22,11 @@ public interface WikiArticleService {
      * @return String with url to wikipedia search query
      */
     String createSearchQueryForWiki(String phrase);
+
+    /**
+     * By given Json in String parse Json form response from wikipedia to list of WikiArticles objects
+     * @param wikiJsonResponse - response from wikipedia
+     * @return List of WikiArticles
+     */
+    List<WikiArticle> parseJsonResponseToWikiArticleList(String wikiJsonResponse);
 }
