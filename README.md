@@ -1,5 +1,5 @@
 # WikipediaSearcher
-Find wikipedia's article for searched result
+Find wikipedia's article for searched result.
 
 App that by given parameter, search for a football club name on the first ten pages of Wikipedia AP, and than redirect to found Wikipedia page.
 
